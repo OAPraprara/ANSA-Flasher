@@ -1,0 +1,20 @@
+{
+  "boards": [
+    {
+      "id": "ansa-f446re",
+      "name": "ANSA OS Nucleo-F446RE",
+      "mcu": "STM32F446RE",
+      "transport": "swd",
+      "versions": [
+        {
+          "version": "1.2.0",
+          "channel": "stable",
+          "url": "https://ansa.dev/firmware/f446re/ansa-1.2.0.bin",
+          "sha256": "a1b2c3...",
+          "signature_url": "https://ansa.dev/firmware/f446re/ansa-1.2.0.bin.sig",
+          "size_bytes": 131072
+        }
+      ]
+    }
+  ]
+}
