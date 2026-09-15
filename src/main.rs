@@ -1,7 +1,10 @@
 mod usb_monitor;
 mod downloader;
 mod verifier;
-
+mod dfu_wrapper;
+mod stlink_wrapper;
+mod progress_parser;
+mod progress_bridge;
 use std::sync::Mutex;
 
 struct AppState {
@@ -29,6 +32,21 @@ fn verify_firmware_sha256(
     verifier::verify_sha256(&file_path, &expected_hash)
 }
 
+#[tauri::command]
+fn flash_firmware_dfu(
+    firmware_path: String,
+) -> Result<String, String> {
+    dfu_wrapper::flash_firmware(&firmware_path)
+}
+
+#[tauri::command]
+fn flash_firmware_stlink(
+    app_handle: tauri::AppHandle,
+    firmware_path: String,
+) -> Result<stlink_wrapper::StLinkFlashResult, String> {
+    stlink_wrapper::flash_firmware(&app_handle, &firmware_path)
+}
+
 fn main() {
     tauri::Builder::default()
         .manage(AppState {
@@ -37,7 +55,9 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             get_usb_devices,
             download_firmware,
-            verify_firmware_sha256
+            verify_firmware_sha256,
+            flash_firmware_dfu,
+            flash_firmware_stlink
         ])
         .setup(|app| {
             let app_handle = app.handle().clone();
