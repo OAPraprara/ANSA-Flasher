@@ -1,3 +1,5 @@
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+
 mod usb_monitor;
 mod downloader;
 mod verifier;
