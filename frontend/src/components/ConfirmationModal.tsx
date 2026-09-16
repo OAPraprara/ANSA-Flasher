@@ -1,17 +1,28 @@
 import React from 'react';
+import { Board, FirmwareVersion } from '../types';
 
 interface ConfirmationModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
+  board?: Board;
+  version?: FirmwareVersion;
 }
 
 export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   isOpen,
   onClose,
   onConfirm,
+  board,
+  version,
 }) => {
-  if (!isOpen) return null;
+  if (!isOpen || !board || !version) return null;
+
+  const getChannelStyle = (channel: string) => {
+    return channel === 'stable'
+      ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30'
+      : 'text-amber-400 bg-amber-500/10 border-amber-500/30';
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 font-sans bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-300">
@@ -46,15 +57,15 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
           
           <div className="flex justify-between items-center mb-3">
             <span className="text-sm font-medium text-slate-400">Target Board</span>
-            <span className="text-sm font-semibold text-slate-200">ANSA OS Nucleo-F446RE</span>
+            <span className="text-sm font-semibold text-slate-200">{board.name}</span>
           </div>
           
           <div className="flex justify-between items-center">
             <span className="text-sm font-medium text-slate-400">Firmware</span>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-semibold text-blue-400">Version 1.2.0</span>
-              <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 rounded-md">
-                Stable
+              <span className="text-sm font-semibold text-blue-400">Version {version.version}</span>
+              <span className={`px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider border rounded-md ${getChannelStyle(version.channel)}`}>
+                {version.channel}
               </span>
             </div>
           </div>

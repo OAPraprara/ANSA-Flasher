@@ -1,28 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Board } from '../types';
 
-// Hardcoded mock state representing the remote firmware registry payload
-const MOCK_BOARDS = [
-  {
-    id: "ansa-f446re",
-    name: "ANSA OS Nucleo-F446RE",
-    mcu: "STM32F446RE",
-    transport: "swd",
-    versions: [
-      {
-        version: "1.2.0",
-        channel: "stable",
-        url: "https://ansa.dev/firmware/f446re/ansa-1.2.0.bin",
-        sha256: "a1b2c3...",
-        signature_url: "https://ansa.dev/firmware/f446re/ansa-1.2.0.bin.sig",
-        size_bytes: 131072
-      }
-    ]
-  }
-];
+interface BoardPickerProps {
+  boards: Board[];
+  selectedBoardId: string | null;
+  onSelectBoard: (id: string) => void;
+}
 
-export const BoardPicker: React.FC = () => {
-  const [selectedBoardId, setSelectedBoardId] = useState<string | null>(null);
-
+export const BoardPicker: React.FC<BoardPickerProps> = ({ boards, selectedBoardId, onSelectBoard }) => {
   return (
     <div className="w-full max-w-6xl mx-auto p-8 font-sans text-slate-100">
       <div className="mb-8">
@@ -32,13 +17,13 @@ export const BoardPicker: React.FC = () => {
       
       {/* Responsive CSS Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {MOCK_BOARDS.map((board) => {
+        {boards.map((board) => {
           const isSelected = selectedBoardId === board.id;
           
           return (
             <div
               key={board.id}
-              onClick={() => setSelectedBoardId(board.id)}
+              onClick={() => onSelectBoard(board.id)}
               className={`
                 group relative p-6 rounded-2xl cursor-pointer bg-slate-800/60 backdrop-blur-sm border transition-all duration-300 ease-out
                 hover:-translate-y-1.5 hover:shadow-[0_12px_30px_-10px_rgba(59,130,246,0.3)] hover:border-slate-500

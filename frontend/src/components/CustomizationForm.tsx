@@ -1,10 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-export const CustomizationForm: React.FC = () => {
+export interface CustomConfig {
+  droneId?: number;
+  ssid?: string;
+  password?: string;
+}
+
+interface CustomizationFormProps {
+  onChange: (config: CustomConfig) => void;
+}
+
+export const CustomizationForm: React.FC<CustomizationFormProps> = ({ onChange }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [droneId, setDroneId] = useState('');
   const [wifiSsid, setWifiSsid] = useState('');
   const [wifiPassword, setWifiPassword] = useState('');
+
+  useEffect(() => {
+    onChange({
+      droneId: droneId ? parseInt(droneId, 10) : undefined,
+      ssid: wifiSsid,
+      password: wifiPassword,
+    });
+  }, [droneId, wifiSsid, wifiPassword, onChange]);
 
   return (
     <div className="w-full max-w-xl mx-auto font-sans">
@@ -35,12 +53,12 @@ export const CustomizationForm: React.FC = () => {
           {/* Drone ID Field */}
           <div>
             <label htmlFor="droneId" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 ml-1">
-              Drone ID
+              Drone ID (Numeric)
             </label>
             <input
               id="droneId"
-              type="text"
-              placeholder="e.g., ANSA-X1"
+              type="number"
+              placeholder="e.g., 1"
               value={droneId}
               onChange={(e) => setDroneId(e.target.value)}
               className="w-full px-4 py-3 bg-slate-900/60 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/25 transition-all duration-200"

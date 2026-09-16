@@ -36,9 +36,10 @@ fn verify_firmware_sha256(
 
 #[tauri::command]
 fn flash_firmware_dfu(
+    app_handle: tauri::AppHandle,
     firmware_path: String,
-) -> Result<String, String> {
-    dfu_wrapper::flash_firmware(&firmware_path)
+) -> Result<dfu_wrapper::DfuFlashResult, String> {
+    dfu_wrapper::flash_firmware(&app_handle, &firmware_path)
 }
 
 #[tauri::command]

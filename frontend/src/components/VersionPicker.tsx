@@ -1,38 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { FirmwareVersion } from '../types';
 
-type ReleaseChannel = 'stable' | 'beta';
-
-interface FirmwareVersion {
-  version: string;
-  channel: ReleaseChannel;
-  url: string;
-  sha256: string;
-  signature_url: string;
-  size_bytes: number;
+interface VersionPickerProps {
+  versions: FirmwareVersion[];
+  selectedVersion: FirmwareVersion | null;
+  onSelectVersion: (version: FirmwareVersion) => void;
 }
 
-const MOCK_VERSIONS: FirmwareVersion[] = [
-  {
-    version: "1.2.0",
-    channel: "stable",
-    url: "https://ansa.dev/firmware/f446re/ansa-1.2.0.bin",
-    sha256: "a1b2c3...",
-    signature_url: "https://ansa.dev/firmware/f446re/ansa-1.2.0.bin.sig",
-    size_bytes: 131072
-  },
-  {
-    version: "1.3.0-beta",
-    channel: "beta",
-    url: "https://ansa.dev/firmware/f446re/ansa-1.3.0-beta.bin",
-    sha256: "d4e5f6...",
-    signature_url: "https://ansa.dev/firmware/f446re/ansa-1.3.0-beta.bin.sig",
-    size_bytes: 135168
-  }
-];
-
-export const VersionPicker: React.FC = () => {
+export const VersionPicker: React.FC<VersionPickerProps> = ({ versions, selectedVersion, onSelectVersion }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState<FirmwareVersion>(MOCK_VERSIONS[0]);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
@@ -46,7 +22,7 @@ export const VersionPicker: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const getChannelStyle = (channel: ReleaseChannel) => {
+  const getChannelStyle = (channel: string) => {
     return channel === 'stable'
       ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
       : 'bg-amber-500/10 border-amber-500/30 text-amber-400';
@@ -61,19 +37,27 @@ export const VersionPicker: React.FC = () => {
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
+          disabled={versions.length === 0}
           className={`
             w-full flex items-center justify-between px-4 py-3 text-left rounded-xl
             bg-slate-800/80 border backdrop-blur-sm transition-all duration-300 ease-out focus:outline-none
+            ${versions.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}
             ${isOpen 
               ? 'border-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.25)] bg-slate-800' 
               : 'border-slate-700 hover:border-slate-500 hover:bg-slate-800'}
           `}
         >
           <div className="flex items-center gap-3">
-            <span className="text-lg font-semibold text-slate-100">{selected.version}</span>
-            <span className={`px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border rounded-lg ${getChannelStyle(selected.channel)}`}>
-              {selected.channel}
-            </span>
+            {selectedVersion ? (
+              <>
+                <span className="text-lg font-semibold text-slate-100">{selectedVersion.version}</span>
+                <span className={`px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border rounded-lg ${getChannelStyle(selectedVersion.channel)}`}>
+                  {selectedVersion.channel}
+                </span>
+              </>
+            ) : (
+              <span className="text-lg font-semibold text-slate-500">Select version...</span>
+            )}
           </div>
           
           <svg
@@ -85,16 +69,16 @@ export const VersionPicker: React.FC = () => {
         </button>
 
         {/* Dropdown Menu */}
-        {isOpen && (
+        {isOpen && versions.length > 0 && (
           <div className="absolute z-10 w-full mt-2 origin-top-right rounded-xl bg-slate-800 border border-slate-700 shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
             <div className="py-1">
-              {MOCK_VERSIONS.map((v) => {
-                const isSelected = selected.version === v.version;
+              {versions.map((v) => {
+                const isSelected = selectedVersion?.version === v.version;
                 return (
                   <button
                     key={v.version}
                     onClick={() => {
-                      setSelected(v);
+                      onSelectVersion(v);
                       setIsOpen(false);
                     }}
                     className={`

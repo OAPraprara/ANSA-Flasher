@@ -9,10 +9,26 @@
         {
           "version": "1.2.0",
           "channel": "stable",
-          "url": "https://ansa.dev/firmware/f446re/ansa-1.2.0.bin",
-          "sha256": "a1b2c3...",
-          "signature_url": "https://ansa.dev/firmware/f446re/ansa-1.2.0.bin.sig",
+          "url": "https://pub-204a9a1fa59a4769a5622b8b9fb81b14.r2.dev/firmware/f446re_v1.2.0.bin",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "signature_url": "https://pub-204a9a1fa59a4769a5622b8b9fb81b14.r2.dev/firmware/f446re_v1.2.0.bin.sig",
           "size_bytes": 131072
+        }
+      ]
+    },
+    {
+      "id": "ansa-blackpill-f411",
+      "name": "STM32 Black Pill (F411CE)",
+      "mcu": "STM32F411CE",
+      "transport": "dfu",
+      "versions": [
+        {
+          "version": "1.0.0",
+          "channel": "stable",
+          "url": "https://pub-204a9a1fa59a4769a5622b8b9fb81b14.r2.dev/firmware/blackpill_v1.0.0.bin",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "signature_url": "https://pub-204a9a1fa59a4769a5622b8b9fb81b14.r2.dev/firmware/blackpill_v1.0.0.bin.sig",
+          "size_bytes": 65536
         }
       ]
     }
