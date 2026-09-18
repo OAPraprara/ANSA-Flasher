@@ -192,7 +192,7 @@ pub fn flash_firmware(app_handle: &AppHandle, firmware_path: &str) -> Result<Dfu
                 progress: 100,
                 message: "Flashing complete".to_string(),
                 done: true,
-                success: true,
+                success: Some(true),
             },
         );
     } else {
@@ -208,7 +208,7 @@ pub fn flash_firmware(app_handle: &AppHandle, firmware_path: &str) -> Result<Dfu
                 progress: 100,
                 message: "Flashing failed".to_string(),
                 done: true,
-                success: false,
+                success: Some(false),
             },
         );
     }

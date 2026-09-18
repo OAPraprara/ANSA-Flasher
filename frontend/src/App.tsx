@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { invoke } from '@tauri-apps/api';
+import { invoke } from '@tauri-apps/api/core';
 import { DeviceStatusBar } from './components/DeviceStatusBar';
 import { BoardPicker } from './components/BoardPicker';
 import { VersionPicker } from './components/VersionPicker';
